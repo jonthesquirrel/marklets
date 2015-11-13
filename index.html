@@ -19,9 +19,42 @@
   <h2><a href="https://github.com/lasercar/marklets">lasercar/marklets</a></h2>
   <hr>
 
-  
+  <ul id="marklets"></ul>
+  <hr>
 
+  <p>footer</p>
+
+<!-- script -->
   <script>
+
+    var elements = {
+      marklets: document.querySelector("#marklets")
+    };
+
+    var templates = {
+      container: function(name, url) {
+        var container = document.createElement("li");
+        var urlElement = document.createElement("a");
+        urlElement.innerHTML = name; //security flaw (xss)
+        urlElement.href = url;
+        container.appendChild(urlElement);
+        return container;
+      }
+    };
+
+    function renderMarklets(data) { //data = [{name,url},...]
+      data.forEach(function(marklet) {
+        var container = new templates.container(marklet.name, marklet.url)
+        elements.marklets.appendChild(container);
+      });
+    }
+
+    //test
+    fakeData = [
+      {name:"google", url:"https://google.com"},
+      {name:"youtube", url:"https://youtube.com"}
+    ];
+    renderMarklets(fakeData);
 
   </script>
 </body>
