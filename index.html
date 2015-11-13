@@ -32,19 +32,23 @@
     };
 
     var templates = {
-      container: function(name, url) {
+      Container: function Container(contained) {
         var container = document.createElement("li");
-        var urlElement = document.createElement("a");
-        urlElement.innerHTML = name; //security flaw (xss)
-        urlElement.href = url;
-        container.appendChild(urlElement);
+        container.appendChild(contained);
         return container;
+      },
+      Marklet: function Marklet(name, url) {
+        var marklet = document.createElement("a");
+        marklet.innerHTML = name; //security flaw (xss)
+        marklet.href = url;
+        return marklet;
       }
     };
 
     function renderMarklets(data) { //data = [{name,url},...]
-      data.forEach(function(marklet) {
-        var container = new templates.container(marklet.name, marklet.url)
+      data.forEach(function(item) {
+        var marklet = new templates.Marklet(item.name, item.url)
+        var container = new templates.Container(marklet);
         elements.marklets.appendChild(container);
       });
     }
