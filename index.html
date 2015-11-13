@@ -18,7 +18,7 @@
     }
 
     ul {
-      text-align: right;
+      text-align: left;
       list-style: none;
     }
 
@@ -97,12 +97,12 @@
         var containerElm = document.createElement("li");
         var markletElm = new templates.Marklet(data.name, data.url);
         var seperatorElm = new templates.Seperator();
+        containerElm.appendChild(markletElm);
         if (data.info) {
           var metaElm = new templates.MarkletMeta(data.info);
-          containerElm.appendChild(metaElm);
           containerElm.appendChild(seperatorElm)
+          containerElm.appendChild(metaElm);
         }
-        containerElm.appendChild(markletElm);
         return containerElm;
       }
     };
