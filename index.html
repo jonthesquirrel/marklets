@@ -7,22 +7,40 @@
   <title>Bookmarklets - lasercar/marklets</title>
 
   <style>
+
     body {
       font-family: sans-serif;
       text-align: center;
     }
+
+    .marklets {
+      text-align: right;
+      /* TODO: center div with contents right-aligned and flexible width */
+    }
+
+    ul {
+      list-style: none;
+    }
+
   </style>
 </head>
 <body>
 
-  <h1>Bookmarklets</h1>
-  <h2><a href="https://github.com/lasercar/marklets">lasercar/marklets</a></h2>
+  <div class="header"><h1>Bookmarklets</h1>
+    <h2><a href="https://github.com/lasercar/marklets">lasercar/marklets</a></h2>
+  </div>
+
   <hr>
 
-  <ul id="marklets"></ul>
+  <div class="marklets">
+    <ul id="marklets"></ul>
+  </div>
+
   <hr>
 
-  <p>footer</p>
+  <div class="footer">
+    <p>footer</p>
+  </div>
 
 <!-- script -->
   <script>
@@ -32,33 +50,49 @@
     };
 
     var templates = {
-      Container: function Container(contained) {
-        var container = document.createElement("li");
-        container.appendChild(contained);
-        return container;
+      Seperator: function() {
+        var seperatorElm = document.createElement("span");
+        seperatorElm.innerHTML = " - ";
+        return seperatorElm;
+      },
+      MarkletMeta: function(info) {
+        var metaElm = document.createElement("span"); //extends element.span
+        metaElm.innerHTML = info; //SECURITY flaw (xss)
+        return metaElm;
       },
       Marklet: function Marklet(name, url) {
-        var marklet = document.createElement("a");
-        marklet.innerHTML = name; //security flaw (xss)
-        marklet.href = url;
-        return marklet;
+        var markletElm = document.createElement("a"); //extends element.a
+        markletElm.innerHTML = name; //SECURITY flaw (xss)
+        markletElm.href = url;
+        return markletElm;
+      },
+      MarkletContainer: function Container(data) {
+        var containerElm = document.createElement("li"); //extends element.li
+        var markletElm = new templates.Marklet(data.name, data.url);
+        var seperatorElm = new templates.Seperator();
+        if (data.info) {
+          var metaElm = new templates.MarkletMeta(data.info);
+          containerElm.appendChild(metaElm);
+          containerElm.appendChild(seperatorElm)
+        }
+        containerElm.appendChild(markletElm);
+        return containerElm;
       }
     };
 
-    function renderMarklets(data) { //data = [{name,url},...]
-      data.forEach(function(item) {
-        var marklet = new templates.Marklet(item.name, item.url)
-        var container = new templates.Container(marklet);
+    function renderMarklets(dataset) { //data = [{name,url,?info},...]
+      dataset.forEach(function(data) {
+        var container = new templates.MarkletContainer(data);
         elements.marklets.appendChild(container);
       });
     }
 
-    //test
-    fakeData = [
+    //TEST
+    fakeDataset = [
       {name:"google", url:"https://google.com"},
-      {name:"youtube", url:"https://youtube.com"}
+      {name:"youtube", url:"https://youtube.com", info:"this is still google"}
     ];
-    renderMarklets(fakeData);
+    renderMarklets(fakeDataset);
 
   </script>
 </body>
