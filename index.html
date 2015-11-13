@@ -51,23 +51,24 @@
 
     var templates = {
       Seperator: function() {
+        //TODO: extend HTMLElement prototypes instead of calling createElement?
         var seperatorElm = document.createElement("span");
         seperatorElm.innerHTML = " - ";
         return seperatorElm;
       },
       MarkletMeta: function(info) {
-        var metaElm = document.createElement("span"); //extends element.span
+        var metaElm = document.createElement("span");
         metaElm.innerHTML = info; //SECURITY flaw (xss)
         return metaElm;
       },
       Marklet: function Marklet(name, url) {
-        var markletElm = document.createElement("a"); //extends element.a
+        var markletElm = document.createElement("a");
         markletElm.innerHTML = name; //SECURITY flaw (xss)
         markletElm.href = url;
         return markletElm;
       },
       MarkletContainer: function Container(data) {
-        var containerElm = document.createElement("li"); //extends element.li
+        var containerElm = document.createElement("li");
         var markletElm = new templates.Marklet(data.name, data.url);
         var seperatorElm = new templates.Seperator();
         if (data.info) {
@@ -86,6 +87,14 @@
         elements.marklets.appendChild(container);
       });
     }
+
+    //marklets list in marklets.json
+
+    //get marklets list from gh-pages with ajax
+
+    //get listed js files with ajax, parse them into marklet url
+
+    //pass processed data to renderMarklets
 
     //TEST
     fakeDataset = [
