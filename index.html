@@ -14,11 +14,11 @@
     }
 
     .marklets {
-      text-align: right;
       /* TODO: center div with contents right-aligned and flexible width */
     }
 
     ul {
+      text-align: right;
       list-style: none;
     }
 
@@ -33,7 +33,22 @@
   <hr>
 
   <div class="marklets">
+    <b>Marklets</b>
     <ul id="marklets"></ul>
+  </div>
+
+  <hr>
+
+  <div class="about">
+    <p>
+      <b>Developers</b><br>
+      To work properly, code must be encased in an anonymous function (or void(0); at end), and use semicolons at ends of lines.
+    </p>
+    <code>
+      (function() {
+        //your script here
+      })();
+    </code>
   </div>
 
   <hr>
@@ -86,20 +101,16 @@
       elements.marklets.appendChild(container);
     }
 
-    function renderMarklet(dataset) { //dataset = [{name,url,?info},...]
-      dataset.forEach(function(data) {
-        renderMarklet(data);
-      });
-    }
-
-    function parseMarklet() {
-      //parse file into marklet url
+    function parseMarklet(script) {
+      var url = encodeURIComponent(script);
+      url = "javascript:" + url;
+      return url;
     }
 
     function markletCallback(event, data) {
-      //parse, render
-      console.log("event.target.response: " + event.target.response);
-      console.log("data: " + JSON.stringify(data));
+      data.script = event.target.response;
+      data.url = parseMarklet(data.script);
+      renderMarklet(data);
     }
 
     function fetchMarklet(data) {
