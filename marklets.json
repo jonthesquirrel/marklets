@@ -3,9 +3,5 @@
     "name": "YouTube FullWindow",
     "path": "youtube-fullwindow.js",
     "info": "Activates hidden full-window player on YouTube"
-  },
-  {
-    "name": "test",
-    "path": "derp.js"
   }
 ]
