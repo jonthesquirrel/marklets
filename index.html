@@ -18,7 +18,7 @@
     }
 
     ul {
-      text-align: right;
+      text-align: left;
       list-style: none;
     }
 
@@ -28,6 +28,10 @@
 
   <div class="header"><h1>Bookmarklets</h1>
     <h2><a href="https://github.com/lasercar/marklets">lasercar/marklets</a></h2>
+    <p>
+      Marklets are JavaScript. Drag them to your bookmarks bar to install them, then click them on any website to run the script.
+      Marklets can do anything, and you have a right to be cautious, so feel free to look at the source code in the repo linked above if you would like.
+    </p>
   </div>
 
   <hr>
@@ -39,22 +43,29 @@
 
   <hr>
 
+  <div class="custom">
+    <i>coming soon: convert your own scripts to bookmarklets</i>
+  </div>
+
+  <hr>
+
   <div class="about">
     <p>
       <b>Developers</b><br>
       To work properly, code must be encased in an anonymous function (or void(0); at end), and use semicolons at ends of lines.
     </p>
     <code>
-      (function() {
-        //your script here
-      })();
+      (function() {<br>
+        //your script here<br>
+      })();<br>
     </code>
+    <p>This website then encodeds the script to be URL-safe, and adds a <code>javascript:</code> prefix. This is a bookmarklet.</p>
   </div>
 
   <hr>
 
   <div class="footer">
-    <p>footer</p>
+    <i>(c) Copyright 2015 Lasercar7 (@lasercar). You may use everything on this website however you wish, according to the MIT License.</i>
   </div>
 
 <!-- script -->
@@ -86,12 +97,12 @@
         var containerElm = document.createElement("li");
         var markletElm = new templates.Marklet(data.name, data.url);
         var seperatorElm = new templates.Seperator();
+        containerElm.appendChild(markletElm);
         if (data.info) {
           var metaElm = new templates.MarkletMeta(data.info);
-          containerElm.appendChild(metaElm);
           containerElm.appendChild(seperatorElm)
+          containerElm.appendChild(metaElm);
         }
-        containerElm.appendChild(markletElm);
         return containerElm;
       }
     };
