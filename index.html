@@ -58,12 +58,12 @@
       },
       MarkletMeta: function(info) {
         var metaElm = document.createElement("span");
-        metaElm.innerHTML = info; //SECURITY flaw (xss)
+        metaElm.innerHTML = info;
         return metaElm;
       },
       Marklet: function Marklet(name, url) {
         var markletElm = document.createElement("a");
-        markletElm.innerHTML = name; //SECURITY flaw (xss)
+        markletElm.innerHTML = name;
         markletElm.href = url;
         return markletElm;
       },
@@ -81,30 +81,64 @@
       }
     };
 
-    function renderMarklets(dataset) { //data = [{name,url,?info},...]
+    function renderMarklet(data) { //data = {name,url,?info}
+      var container = new templates.MarkletContainer(data);
+      elements.marklets.appendChild(container);
+    }
+
+    function renderMarklet(dataset) { //dataset = [{name,url,?info},...]
       dataset.forEach(function(data) {
-        var container = new templates.MarkletContainer(data);
-        elements.marklets.appendChild(container);
+        renderMarklet(data);
       });
     }
 
-    //edit marklets list in marklets.json when adding/modifying marklet files
+    function parseMarklet() {
+      //parse file into marklet url
+    }
 
-    //get marklets as index from gh-pages with ajax
+    function markletCallback(event, data) {
+      //parse, render
+      console.log("event.target.response: " + event.target.response);
+      console.log("data: " + JSON.stringify(data));
+    }
 
-    //get listed js files with ajax, parse them into marklet urls
+    function fetchMarklet(data) {
+      var path = "marklets/" + data.path;
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", function(event) {
+        markletCallback(event, data);
+      });
+      xhr.open("GET", path);
+      xhr.send();
+    }
 
-    //ajax = ("marklets/" + index.item.file)
+    function fetchMarklets(index) {
+      //async, split for each marklet
+      for (i in index) {
+        fetchMarklet(index[i]);
+      }
+    }
 
-    //pass processed data to renderMarklets
+    function indexCallback(event) {
+      var index = JSON.parse(event.target.response);
+      fetchMarklets(index);
+    }
 
-    //TEST
-    fakeDataset = [
-      {name:"google", url:"https://google.com"},
-      {name:"youtube", url:"https://youtube.com", info:"this is still google"}
-    ];
-    renderMarklets(fakeDataset);
+    function fetchIndex() {
+      //async
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", indexCallback);
+      xhr.open("GET", "marklets.json");
+      xhr.send();
+    }
 
+    function init() {
+      fetchIndex();
+      //async, run backwards per-file with callbacks
+      //use promises in the future?
+    }
+
+    window.addEventListener("load", init);
   </script>
 </body>
 </html>
