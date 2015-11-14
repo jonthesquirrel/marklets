@@ -30,7 +30,7 @@
     <h2><a href="https://github.com/lasercar/marklets">lasercar/marklets</a></h2>
     <p>
       Marklets are JavaScript. Drag them to your bookmarks bar to install them, then click them on any website to run the script.
-      Marklets can do anything, and you have a right to be cautious, so feel free to look at the source code in the repo linked above if you would like.
+      Marklets are useful and powerful, because they run with the same permissions (client-side) as the website you run them on. It is sensible to be cautious, so feel free to look at the source code of the marklets if you wish.
     </p>
   </div>
 
@@ -45,6 +45,7 @@
 
   <div class="custom">
     <i>coming soon: convert your own scripts to bookmarklets</i>
+    <!-- TODO -->
   </div>
 
   <hr>
@@ -52,11 +53,11 @@
   <div class="about">
     <p>
       <b>Developers</b><br>
-      To work properly, code must be encased in an anonymous function (or void(0); at end), and use semicolons at ends of lines.
+      To work properly, your javascript must be encased in an anonymous function (or void(0); at end). It must use semicolons at ends of lines, and not use single-line comments.
     </p>
     <code>
       (function() {<br>
-        //your script here<br>
+        your script here<br>
       })();<br>
     </code>
     <p>This website then encodeds the script to be URL-safe, and adds a <code>javascript:</code> prefix. This is a bookmarklet.</p>
@@ -76,8 +77,14 @@
     };
 
     var templates = {
+      SourceLink: function(path) {
+        var linkElm = document.createElement("a");
+        var url = "marklets/" + path;
+        linkElm.href = url;
+        linkElm.innerHTML = "[source]";
+        return linkElm;
+      },
       Seperator: function() {
-        //TODO: extend HTMLElement prototypes instead of calling createElement?
         var seperatorElm = document.createElement("span");
         seperatorElm.innerHTML = " - ";
         return seperatorElm;
@@ -95,21 +102,19 @@
       },
       MarkletContainer: function Container(data) {
         var containerElm = document.createElement("li");
-        var markletElm = new templates.Marklet(data.name, data.url);
-        var seperatorElm = new templates.Seperator();
-        containerElm.appendChild(markletElm);
+        containerElm.appendChild(templates.SourceLink(data.path));
+        containerElm.appendChild(templates.Seperator());
+        containerElm.appendChild(templates.Marklet(data.name, data.url));
         if (data.info) {
-          var metaElm = new templates.MarkletMeta(data.info);
-          containerElm.appendChild(seperatorElm)
-          containerElm.appendChild(metaElm);
+          containerElm.appendChild(templates.Seperator())
+          containerElm.appendChild(templates.MarkletMeta(data.info));
         }
         return containerElm;
       }
     };
 
     function renderMarklet(data) { //data = {name,url,?info}
-      var container = new templates.MarkletContainer(data);
-      elements.marklets.appendChild(container);
+      elements.marklets.appendChild(templates.MarkletContainer(data));
     }
 
     function parseMarklet(script) {
@@ -135,7 +140,7 @@
     }
 
     function fetchMarklets(index) {
-      //async, split for each marklet
+      //async, split into per file
       for (i in index) {
         fetchMarklet(index[i]);
       }
@@ -147,7 +152,6 @@
     }
 
     function fetchIndex() {
-      //async
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("load", indexCallback);
       xhr.open("GET", "marklets.json");
@@ -155,9 +159,9 @@
     }
 
     function init() {
+      //async
       fetchIndex();
-      //async, run backwards per-file with callbacks
-      //use promises in the future?
+      //FUTURE use promises?
     }
 
     window.addEventListener("load", init);
