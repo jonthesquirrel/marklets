@@ -22,6 +22,28 @@
       list-style: none;
     }
 
+    a {
+      color: #00BEBE;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    a.marklet {
+      background-color: #00BEBE;
+      color: white;
+      padding: .5em;
+    }
+
+    a:hover.marklet {
+      box-shadow: 2px 2px 0 0 black;
+    }
+
+    a:active.marklet {
+      box-shadow: none;
+    }
+
   </style>
 </head>
 <body>
@@ -98,6 +120,7 @@
         var markletElm = document.createElement("a");
         markletElm.innerHTML = name;
         markletElm.href = url;
+        markletElm.classList.add("marklet");
         return markletElm;
       },
       MarkletContainer: function Container(data) {
