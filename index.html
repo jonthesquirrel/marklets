@@ -77,8 +77,14 @@
     };
 
     var templates = {
+      SourceLink: function(path) {
+        var linkElm = document.createElement("a");
+        var url = "marklets/" + path;
+        linkElm.href = url;
+        linkElm.innerHTML = "[source]";
+        return linkElm;
+      },
       Seperator: function() {
-        //FUTURE extend HTMLElement prototypes instead of calling createElement?
         var seperatorElm = document.createElement("span");
         seperatorElm.innerHTML = " - ";
         return seperatorElm;
@@ -96,24 +102,19 @@
       },
       MarkletContainer: function Container(data) {
         var containerElm = document.createElement("li");
-        //TODO
-        //<a href="marklets/ + data.path">(source)</a>
-        //seperator
-        var markletElm = new templates.Marklet(data.name, data.url);
-        var seperatorElm = new templates.Seperator();
-        containerElm.appendChild(markletElm);
+        containerElm.appendChild(templates.SourceLink(data.path));
+        containerElm.appendChild(templates.Seperator());
+        containerElm.appendChild(templates.Marklet(data.name, data.url));
         if (data.info) {
-          var metaElm = new templates.MarkletMeta(data.info);
-          containerElm.appendChild(seperatorElm)
-          containerElm.appendChild(metaElm);
+          containerElm.appendChild(templates.Seperator())
+          containerElm.appendChild(templates.MarkletMeta(data.info));
         }
         return containerElm;
       }
     };
 
     function renderMarklet(data) { //data = {name,url,?info}
-      var container = new templates.MarkletContainer(data);
-      elements.marklets.appendChild(container);
+      elements.marklets.appendChild(templates.MarkletContainer(data));
     }
 
     function parseMarklet(script) {
@@ -129,7 +130,6 @@
     }
 
     function fetchMarklet(data) {
-      //TODO write data.file in marklets index, then convert into data.path here by adding "marklets/"
       var path = "marklets/" + data.path;
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("load", function(event) {
@@ -140,7 +140,7 @@
     }
 
     function fetchMarklets(index) {
-      //async, split for each marklet
+      //async, split into per file
       for (i in index) {
         fetchMarklet(index[i]);
       }
@@ -152,7 +152,6 @@
     }
 
     function fetchIndex() {
-      //async
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("load", indexCallback);
       xhr.open("GET", "marklets.json");
@@ -160,8 +159,8 @@
     }
 
     function init() {
+      //async
       fetchIndex();
-      //async, run backwards per-file with callbacks
       //FUTURE use promises?
     }
 
