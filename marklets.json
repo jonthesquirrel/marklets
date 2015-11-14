@@ -2,7 +2,7 @@
   {
     "name": "YouTube FullWindow",
     "path": "marklets/youtube-fullwindow.js",
-    "info": "Activates hidden full-window player on YouTube"
+    "info": "Activates hidden full-window player in YouTube videos"
   },
   {
     "name": "Rainbow Paint",
