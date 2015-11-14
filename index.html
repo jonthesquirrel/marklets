@@ -108,8 +108,7 @@
     var templates = {
       SourceLink: function(path) {
         var linkElm = document.createElement("a");
-        var url = "marklets/" + path;
-        linkElm.href = url;
+        linkElm.href = path;
         linkElm.innerHTML = "[source]";
         return linkElm;
       },
@@ -161,12 +160,11 @@
     }
 
     function fetchMarklet(data) {
-      var path = "marklets/" + data.path;
       var xhr = new XMLHttpRequest();
       xhr.addEventListener("load", function(event) {
         markletCallback(event, data);
       });
-      xhr.open("GET", path);
+      xhr.open("GET", data.path);
       xhr.send();
     }
 

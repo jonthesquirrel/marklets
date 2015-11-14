@@ -1,12 +1,12 @@
 [
   {
     "name": "YouTube FullWindow",
-    "path": "youtube-fullwindow.js",
+    "path": "marklets/youtube-fullwindow.js",
     "info": "Activates hidden full-window player on YouTube"
   },
   {
     "name": "Rainbow Paint",
-    "path": "rainbow-paint.js",
+    "path": "marklets/rainbow-paint.js",
     "info": "Makes your mouse a paintbrush of random rainbows"
   }
 ]
