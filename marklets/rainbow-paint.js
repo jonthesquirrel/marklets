@@ -13,5 +13,6 @@
 
   window.addEventListener("mouseover", function(event) {
     paint(event.target);
+    event.stopPropagation();
   });
 })();
