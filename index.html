@@ -44,6 +44,10 @@
       box-shadow: none;
     }
 
+    .marklet-container {
+      margin-bottom: 2em;
+    }
+
   </style>
 </head>
 <body>
@@ -132,6 +136,7 @@
           containerElm.appendChild(templates.Seperator())
           containerElm.appendChild(templates.MarkletMeta(data.info));
         }
+        containerElm.classList.add("marklet-container");
         return containerElm;
       }
     };
