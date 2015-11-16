@@ -84,11 +84,11 @@
       <b>Developers</b><br>
       To work properly, your javascript must be encased in a self-executing anonymous function (or void(0); at the end). It also needs to have semicolons in proper places, and have no single-line comments (actully, this might not be true, considering newlines are encoded).
     </p>
-    <code>
-      (function() {<br>
-        your script here<br>
-      })();<br>
-    </code>
+    <pre>
+      (function() {
+        your script here
+      })();
+    </pre>
     <p>This website then encodeds the script to be URL-safe, and adds a <code>javascript:</code> prefix. The result is a bookmarklet!</p>
   </div>
 
